@@ -6,7 +6,15 @@
 Argon
 =========
 
-Helpers for sub-commands.
+Helpers for sub-commands. 
+
+
+Installation
+------------
+
+.. code-block:: bash
+
+    $ pip install argon
 
 
 Contents
