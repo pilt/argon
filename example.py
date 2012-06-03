@@ -33,7 +33,7 @@ def main():
 def show(func):
     """Decorator to print the return value of func, possibly reversed. """
     def wrapper(args):
-        output = func(args)
+        output = str(func(args))
         if args.reverse:
             print "".join(reversed(output))
         else:
