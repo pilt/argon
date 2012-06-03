@@ -23,6 +23,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   motivation
    example
    ref/api
    ref/tests
