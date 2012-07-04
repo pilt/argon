@@ -115,5 +115,29 @@ class TestArgon(unittest.TestCase):
         self.assertEqual(app.run("a a -y".split()), (False, True))
         self.assertEqual(app.run("a -x foo a -y".split()), ("foo", True))
 
+    def test_parse(self):
+        handler = lambda args: args
+        app = argon.App()
+        with app.command("a") as a:
+            a.handler(handler)
+        func, args = app.parse(["a"])
+        self.assertIs(func, handler)
+
+    def test_parse_known(self):
+        handler = lambda args: args
+        app = argon.App()
+        with app.command("a") as a:
+            a.handler(handler)
+        func, args, unknowns = app.parse_known(["a", "b"])
+        self.assertIs(func, handler)
+        self.assertEqual(unknowns, ["b"])
+
+    def test_run_known(self):
+        return_unknowns = lambda args, unknowns: unknowns
+        app = argon.App()
+        with app.command("a") as a:
+            a.handler(return_unknowns)
+        self.assertEqual(app.run_known(["a", "b"]), ["b"])
+
 if __name__ == "__main__":
     unittest.main()

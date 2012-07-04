@@ -126,8 +126,40 @@ class App(Sub):
         self.subs = set()
         self.commands = set()
 
-    def run(self, args):
-        """Run application. Typically ``app.run(sys.argv[1:])``.
+    def parse(self, args):
+        """Parse arguments.
+
+        :returns: a two-tuple ``(callable, parsed_args)``
         """
         parsed_args = self.parser.parse_args(args)
-        return parsed_args._argon_func(parsed_args)
+        return parsed_args._argon_func, parsed_args
+
+    def parse_known(self, args):
+        """Parse known arguments.
+
+        :returns: a three-tuple ``(callable, parsed_args, unknowns)``
+        """
+        parsed_args, unknowns = self.parser.parse_known_args(args)
+        return parsed_args._argon_func, parsed_args, unknowns
+
+    def run(self, args):
+        """Run application. Typically ``app.run(sys.argv[1:])``.
+
+        Same as::
+
+            >>> func, parsed_args = self.parse()
+            >>> func(parsed_args)
+        """
+        func, parsed_args = self.parse(args)
+        return func(parsed_args)
+
+    def run_known(self, args):
+        """Run application, allow unknown args. 
+
+        Same as::
+
+            >>> func, parsed_args, unknowns = self.parse_known()
+            >>> func(parsed_args, unknowns)
+        """
+        func, parsed_args, unknowns = self.parse_known(args)
+        return func(parsed_args, unknowns)
